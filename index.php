@@ -38,8 +38,25 @@ class Flexible_Invoices_Exporter {
 	}
 
 	public function invoices_export() {
+		$this->send_headers();
 		echo true;
 		wp_die();
+	}
+
+	public function send_headers() {
+		$sitename = sanitize_key( get_bloginfo( 'name' ) );
+		if( empty( $sitename ) ) {
+			$sitename = 'wordpress';
+		}
+
+		$filename = sprintf('%s-invoices-%s.xml',
+			$sitename,
+			date( 'Y-m-d' )
+		);
+
+		header( 'Content-Description: File Transfer' );
+		header( 'Content-Disposition: attachment; filename=' . $filename );
+		header( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), true );
 	}
 
 } new Flexible_Invoices_Exporter();
