@@ -47,8 +47,9 @@ class Flexible_Invoices_Exporter {
 
 		$xml = new XMLWriter();
 		$xml->openMemory();
-		$xml->startDocument("1.0");
-		$xml->startElement("export");
+		$xml->setIndent( true );
+		$xml->startDocument( '1.0', get_option( 'blog_charset' ) );
+		$xml->startElement( 'export' );
 		
 		$query = new WP_Query( [
 			'post_type'   => 'inspire_invoice',
@@ -60,7 +61,21 @@ class Flexible_Invoices_Exporter {
 			'nopaging'    => true,
 		] );
 
-		var_dump($query); die;
+		foreach ($query->posts as $post) {
+			$xml->startElement( 'invoice' );
+			$xml->writeAttribute( 'currency', get_post_meta( $post->ID, '_currency', true ) );
+			$xml->startElement( 'number' );
+			$xml->writeAttribute( 'numeric', get_post_meta( $post->ID, '_number', true ) );
+			$xml->text( get_post_meta ( $post->ID, '_formatted_number', true ) );
+			$xml->endElement(); //number
+			// data
+			// klient
+			// produkty
+			$xml->writeElement( 'totalPrice', get_post_meta ( $post->ID, '_total_price', true ) );
+			$xml->endElement(); //invoice
+		}
+
+		// var_dump($query); die;
 		
 		$xml->endElement();
 		$xml->endDocument();
