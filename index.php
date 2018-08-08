@@ -44,6 +44,16 @@ class Flexible_Invoices_Exporter {
 			wp_die('Nie posiadasz uprawnień do wykonania tej operacji.', 'Nie powinno cię tu być!');
 		}
 		$this->send_headers();
+
+		$xml = new XMLWriter();
+		$xml->openMemory();
+		$xml->startDocument("1.0");
+		$xml->startElement("export");
+		$xml->text("example");
+		$xml->endElement();
+		$xml->endDocument();
+		echo $xml->outputMemory();
+
 		wp_die();
 	}
 
@@ -58,8 +68,8 @@ class Flexible_Invoices_Exporter {
 			date( 'Y-m-d' )
 		);
 
-		header( 'Content-Description: File Transfer' );
-		header( 'Content-Disposition: attachment; filename=' . $filename );
+		// header( 'Content-Description: File Transfer' );
+		// header( 'Content-Disposition: attachment; filename=' . $filename );
 		header( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), true );
 	}
 
