@@ -27,9 +27,6 @@ class Flexible_Invoices_Exporter {
 	function __construct() {
 		add_filter( 'views_edit-inspire_invoice', [$this, 'add_export_button' ] );
 		add_action( 'wp_ajax_flexible_invoices_export', [ $this, 'invoices_export' ] );
-		// add_action( 'admin_bar_menu', array( &$this, 'admin_bar_menu' ) );
-		// add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue' ) );
-		// add_action( 'the_post', array( &$this, 'the_post' ), 1, 2 );
 	}
 
 	public function add_export_button( $views ) {
