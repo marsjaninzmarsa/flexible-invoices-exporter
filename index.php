@@ -25,7 +25,8 @@
 class Flexible_Invoices_Exporter {
 
 	function __construct() {
-		add_filter( 'views_edit-inspire_invoice', [ $this, 'add_export_button' ] );
+		add_filter( 'views_edit-inspire_invoice', [$this, 'add_export_button' ] );
+		add_action( 'wp_ajax_flexible_invoices_export', [ $this, 'invoices_export' ] );
 		// add_action( 'admin_bar_menu', array( &$this, 'admin_bar_menu' ) );
 		// add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue' ) );
 		// add_action( 'the_post', array( &$this, 'the_post' ), 1, 2 );
@@ -34,9 +35,14 @@ class Flexible_Invoices_Exporter {
 	public function add_export_button( $views ) {
 		$views[ 'flexible-invoices-export' ] = sprintf( '<a href="%s?%s">Eksportuj faktury do XML-a</a>',
 			admin_url( 'admin-ajax.php' ),
-			http_build_query( [ 'action' =>  'flexible-invoices-export' ] )
+			http_build_query( [ 'action' =>  'flexible_invoices_export' ] )
 		);
 		return $views;
-	}		
+	}
+
+	public function invoices_export() {
+		echo true;
+		wp_die();
+	}
 
 } new Flexible_Invoices_Exporter();
