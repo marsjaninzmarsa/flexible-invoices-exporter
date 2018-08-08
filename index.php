@@ -30,16 +30,20 @@ class Flexible_Invoices_Exporter {
 	}
 
 	public function add_export_button( $views ) {
-		$views[ 'flexible-invoices-export' ] = sprintf( '<a href="%s?%s">Eksportuj faktury do XML-a</a>',
-			admin_url( 'admin-ajax.php' ),
-			http_build_query( [ 'action' =>  'flexible_invoices_export' ] )
-		);
+		if( current_user_can( 'administrator' ) ) {
+			$views[ 'flexible-invoices-export' ] = sprintf( '<a href="%s?%s">Eksportuj faktury do XML-a</a>',
+				admin_url( 'admin-ajax.php' ),
+				http_build_query( [ 'action' =>  'flexible_invoices_export' ] )
+			);
+		}
 		return $views;
 	}
 
 	public function invoices_export() {
+		if( ! current_user_can( 'administrator' )) {
+			wp_die('Nie posiadasz uprawnień do wykonania tej operacji.', 'Nie powinno cię tu być!');
+		}
 		$this->send_headers();
-		echo true;
 		wp_die();
 	}
 
