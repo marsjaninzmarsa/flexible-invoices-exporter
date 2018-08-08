@@ -49,7 +49,19 @@ class Flexible_Invoices_Exporter {
 		$xml->openMemory();
 		$xml->startDocument("1.0");
 		$xml->startElement("export");
-		$xml->text("example");
+		
+		$query = new WP_Query( [
+			'post_type'   => 'inspire_invoice',
+			'post_status' => 'publish',
+
+			'order'       => 'DESC',
+			'orderby'     => 'date',
+
+			'nopaging'    => true,
+		] );
+
+		var_dump($query); die;
+		
 		$xml->endElement();
 		$xml->endDocument();
 		echo $xml->outputMemory();
