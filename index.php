@@ -71,11 +71,10 @@ class Flexible_Invoices_Exporter {
 			$xml->endElement(); //number
 
 			$xml->startElement( 'date' );
-			$xml->writeElement( 'issue', get_post_meta( $post->ID, '_date_issue', true ) );
-			$xml->writeElement( 'sale', get_post_meta( $post->ID, '_date_sale', true ) );
-			$xml->writeElement( 'pay', get_post_meta( $post->ID, '_date_pay', true ) );
-			if( $date_paid = get_post_meta( $post->ID, '_date_paid', true ) ) {
-				$xml->writeElement( 'paid', $date_paid ); // not sure why not updating in db
+			foreach (['issue', 'sale', 'pay', 'paid'] as $key) { // not sure why there is no paid date in db
+				if( $value = get_post_meta( $post->ID, '_date_' . $key, true ) ) {
+					$xml->writeElement( $key, $value );
+				}
 			}
 			$xml->endElement(); //date
 
