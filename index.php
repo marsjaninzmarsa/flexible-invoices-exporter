@@ -79,15 +79,19 @@ class Flexible_Invoices_Exporter {
 			}
 			$xml->endElement(); //date
 
-			// klient
+			$xml->startElement( 'client' );
+			$client = get_post_meta( $post->ID, '_client', true );
+			foreach ($client as $key => $value) {
+				$xml->writeElement( $key, $value );
+			}
+			$xml->endElement(); //client
+
 			// produkty
 			
-			$xml->writeElement( 'totalPrice', get_post_meta ( $post->ID, '_total_price', true ) );
+			$xml->writeElement( 'totalPrice', get_post_meta( $post->ID, '_total_price', true ) );
 			
 			$xml->endElement(); //invoice
 		}
-
-		// var_dump($query); die;
 		
 		$xml->endElement();
 		$xml->endDocument();
