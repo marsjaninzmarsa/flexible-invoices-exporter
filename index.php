@@ -143,8 +143,8 @@ class Flexible_Invoices_Exporter {
 			date( 'Y-m-d' )
 		);
 
-		// header( 'Content-Description: File Transfer' );
-		// header( 'Content-Disposition: attachment; filename=' . $filename );
+		header( 'Content-Description: File Transfer' );
+		header( 'Content-Disposition: attachment; filename=' . $filename );
 		header( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), true );
 	}
 
