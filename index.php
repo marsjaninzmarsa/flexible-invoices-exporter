@@ -85,7 +85,40 @@ class Flexible_Invoices_Exporter {
 			}
 			$xml->endElement(); //client
 
-			// produkty
+			$xml->startElement( 'products' );
+			$products = get_post_meta( $post->ID, '_products', true );
+			foreach ($products as $product) {
+				$xml->startElement( 'product' );
+
+				$xml->writeElement( 'name', $product['name'] );
+
+				$xml->startElement( 'quantity' );
+				$xml->writeAttribute( 'unit', $product['unit'] );
+				$xml->text( $product['quantity'] );
+				$xml->endElement(); //quantity
+
+				$xml->writeElement( 'netPrice', $product['net_price'] );
+
+				$xml->writeElement( 'discount', $product['discount'] );
+
+				$xml->writeElement( 'netPriceDiscount', $product['net_price_discount'] );
+				
+				$xml->writeElement( 'netPriceSum', $product['net_price_sum'] );
+				
+				$xml->startElement( 'vatType' );
+				$xml->writeAttribute( 'numeric', $product['vat_type'] );
+				$xml->text( $product['vat_type_name'] );
+				$xml->endElement(); //vatType
+				
+				$xml->writeElement( 'vatRate', $product['vat_rate'] );
+				
+				$xml->writeElement( 'vatSum', $product['vat_sum'] );
+				
+				$xml->writeElement( 'totalPrice', $product['total_price'] );
+				
+				$xml->endElement(); //product
+			}
+			$xml->endElement(); //products
 			
 			$xml->writeElement( 'totalPrice', get_post_meta( $post->ID, '_total_price', true ) );
 			
