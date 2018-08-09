@@ -64,14 +64,26 @@ class Flexible_Invoices_Exporter {
 		foreach ($query->posts as $post) {
 			$xml->startElement( 'invoice' );
 			$xml->writeAttribute( 'currency', get_post_meta( $post->ID, '_currency', true ) );
+
 			$xml->startElement( 'number' );
 			$xml->writeAttribute( 'numeric', get_post_meta( $post->ID, '_number', true ) );
 			$xml->text( get_post_meta ( $post->ID, '_formatted_number', true ) );
 			$xml->endElement(); //number
-			// data
+
+			$xml->startElement( 'date' );
+			$xml->writeElement( 'issue', get_post_meta( $post->ID, '_date_issue', true ) );
+			$xml->writeElement( 'sale', get_post_meta( $post->ID, '_date_sale', true ) );
+			$xml->writeElement( 'pay', get_post_meta( $post->ID, '_date_pay', true ) );
+			if( $date_paid = get_post_meta( $post->ID, '_date_paid', true ) ) {
+				$xml->writeElement( 'paid', $date_paid ); // not sure why not updating in db
+			}
+			$xml->endElement(); //date
+
 			// klient
 			// produkty
+			
 			$xml->writeElement( 'totalPrice', get_post_meta ( $post->ID, '_total_price', true ) );
+			
 			$xml->endElement(); //invoice
 		}
 
